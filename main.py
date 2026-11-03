@@ -19,13 +19,13 @@ print("Device:", device)
 run_name = datetime.now().astimezone().strftime("%Y-%m-%d_%H%M%S")
 run_dir = Path(args.resume) if args.resume else Path(args.output_dir) / run_name
 
-# 2. Iterate over each fold
+# 2. Fixed train/val split from the CSVs
 
-for fold in range(5):
+for fold in range(1):
     print(f"fold {fold}")
     train_set = pd.read_csv(os.path.join(args.csv_dir, "train.csv"))
     val_set = pd.read_csv(os.path.join(args.csv_dir, "val.csv"))
-    #test_set = pd.read_csv(os.path.join(args.csv_dir, "test.csv"))
+    # test_set = pd.read_csv(os.path.join(args.csv_dir, "test.csv"))
 
     # 3. Preparing dataset
     train_dataset = knee_segmentation_dataset(train_set)

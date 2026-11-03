@@ -1,16 +1,21 @@
 from pathlib import Path
 
 import cv2
+import numpy as np
 import torch
 from torch.utils.data import Dataset
 
 ROOT = Path(__file__).resolve().parent
 
 
-def read_img(file_path):
-    xray = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
+def read_xray(file_path):
+    xray = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE) # H W
     if xray is None:
         raise FileNotFoundError(file_path)
+
+    xray = xray.astype(np.float32) / 255.0
+    xray = xray.reshape(1, *xray.shape) # 1 H W
+
     return xray
 
 
@@ -29,11 +34,10 @@ class knee_segmentation_dataset(Dataset):
         return len(self.dataset)
 
     def __getitem__(self, idx):
-        img = read_img(str(ROOT / self.dataset["xrays"].iloc[idx]))
+        xray = read_xray(str(ROOT / self.dataset["xrays"].iloc[idx]))
         mask = read_mask(str(ROOT / self.dataset["masks"].iloc[idx]))
 
-        # Grayscale to normalized 3-channel tensor for the ImageNet backbone.
-        xray = torch.from_numpy(img).unsqueeze(0).repeat(3, 1, 1).float().div(255)
+        xray = torch.from_numpy(xray)
         # Masks are stored as 0/255.
         mask = torch.from_numpy(mask).unsqueeze(0).float().div(255)
 

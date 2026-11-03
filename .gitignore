@@ -1,0 +1,5 @@
+data/
+!data/CSVs/
+*.pyc
+__pycache__/
+sessions/

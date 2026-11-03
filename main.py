@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 
 from args import *
 from dataset import knee_segmentation_dataset
-from model import MyModel
+from model import UNet
 from train import train_model
 
 # 1. get arguments
@@ -36,7 +36,7 @@ for fold in range(1):
     val_loader = DataLoader(val_dataset, batch_size=args.batch_size)
 
     # 5. Initializing the model
-    model = MyModel(backbone=args.backbone).to(device)
+    model = UNet().to(device)
 
     # 6. Train the model
     train_model(

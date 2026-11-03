@@ -6,13 +6,6 @@ def get_args():
     parser = argparse.ArgumentParser(description="Parse model training options.")
 
     parser.add_argument(
-        "--backbone",
-        type=str,
-        default="resnet18",
-        choices=["resnet18", "resnet34", "resnet50"],
-    )
-
-    parser.add_argument(
         "--output_dir",
         type=str,
         default="sessions",
